@@ -29,3 +29,8 @@ func RootRoute(router *gin.Engine) {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Page not found"})
 	})
 }
+
+// func UserRoutes(router *gin.Engine, userController users.UserController){
+// 	users := router.Group("/users")
+// 	users.POST("/", userController.RegisterUser)
+// }
