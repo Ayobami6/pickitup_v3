@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 
+	"github.com/Ayobami6/pickitup_v3/config"
 	"github.com/Ayobami6/pickitup_v3/internal/users/dto"
 	"github.com/Ayobami6/pickitup_v3/pkg/auth"
 	"github.com/Ayobami6/pickitup_v3/pkg/models"
@@ -50,11 +51,31 @@ func (u *UserService)RegisterUser(pl dto.RegisterUserDTO) (any, error) {
 	} else {
 		// send the mail
 		msg := fmt.Sprintf("Your verification code is %d\n", num)
-		err = utils.SendMail(email, "Email Verification", username, msg)
-        if err!= nil {
-            log.Printf("Email sending failed due to %v\n", err)
-        }
+		go utils.SendMail(email, "Email Verification", username, msg)
 	}
 	message := "Registration Successfully"
     return message, nil
+}
+
+
+func (u *UserService) LoginUser(pl dto.LoginDTO) (string, error) {
+	email := pl.Email
+    password := pl.Password
+    // check if user exists
+    user, err := u.repo.GetUserByEmail(email)
+    if err!= nil {
+        return "", errors.New("user not found")
+    }
+    // compare hashed passwords
+    if !auth.CheckPassword(user.Password, []byte(password)) {
+        return "", errors.New("invalid password")
+    }
+    // generate and return JWT token
+	secret := []byte(config.GetEnv("JWT_SECRET", "secret"))
+    token, err := auth.CreateJWT(secret, int(user.ID))
+    if err!= nil {
+		log.Println("Failed to create jwt token: ", err)
+        return "", err
+    }
+    return token, nil
 }

@@ -22,6 +22,7 @@ func NewUserController(service UserService) *UserController {
 func (uc *UserController)RegisterRoutes(router *gin.RouterGroup) {
 	users := router.Group("/users")
 	users.POST("/register", uc.RegisterUser)
+	users.POST("/login", uc.Login)
 }
 
 func (uc *UserController)RegisterUser(c *gin.Context){
@@ -47,4 +48,25 @@ func (uc *UserController)RegisterUser(c *gin.Context){
         return
     }
     c.JSON(201, utils.Response(http.StatusCreated,  nil, msg.(string)))
+}
+
+func (uc *UserController)Login(c *gin.Context) {
+	var payload dto.LoginDTO
+    // bind json payload
+    if err := c.ShouldBindJSON(&payload); err!= nil {
+        log.Println(err)
+        c.JSON(400, utils.Response(400,  nil, err.Error()))
+        return
+    }
+    // login user
+    token, err := uc.service.LoginUser(payload)
+    if err!= nil {
+        log.Println(err)
+        c.JSON(401, utils.Response(401,  nil, "Invalid credentials"))
+        return
+    }
+	data := map[string]any{
+		"token": token,
+	}
+    c.JSON(200, utils.Response(http.StatusOK, data, "Login Successful"))
 }

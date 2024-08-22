@@ -20,3 +20,9 @@
 2024/08/22 15:28:14 user_controller.go:38: user with this email already exists
 2024/08/22 15:33:20 db.go:15: Database Connected Successfully!
 2024/08/22 15:34:48 db.go:15: Database Connected Successfully!
+2024/08/22 15:37:56 db.go:15: Database Connected Successfully!
+2024/08/22 16:01:10 db.go:15: Database Connected Successfully!
+2024/08/22 16:08:57 db.go:15: Database Connected Successfully!
+2024/08/22 16:32:29 user_controller.go:39: ERROR: duplicate key value violates unique constraint "uni_users_phone_number" (SQLSTATE 23505)
+2024/08/22 16:32:36 user_service.go:56: Email sending failed due to open utils/verification_template.html: The system cannot find the path specified.
+2024/08/22 16:35:47 db.go:15: Database Connected Successfully!

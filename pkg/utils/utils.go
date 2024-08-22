@@ -137,7 +137,7 @@ func ParseJSON(r *http.Request, payload any) error {
 }
 
 func SendMail(recipient string, subject string, username string, message string) error {
-	tmpl, err := os.ReadFile("utils/verification_template.html")
+	tmpl, err := os.ReadFile("templates/verification_template.html")
 	if err != nil {
 		fmt.Println("Error reading template file:", err)
 		return err
