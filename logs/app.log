@@ -1,0 +1,6 @@
+2024/08/22 09:49:09 main.go:42: failed to connect to `host=localhost user=ayo database=pickitup_db3`: tls error (server refused TLS connection)
+2024/08/22 09:50:14 main.go:42: Failed to connect to database: failed to connect to `host=localhost user=ayo database=pickitup_db3`: tls error (server refused TLS connection)
+2024/08/22 09:51:12 db.go:15: Database Connected Successfully!
+2024/08/22 10:05:33 db.go:15: Database Connected Successfully!
+2024/08/22 10:55:09 db.go:15: Database Connected Successfully!
+2024/08/22 10:58:56 db.go:15: Database Connected Successfully!
