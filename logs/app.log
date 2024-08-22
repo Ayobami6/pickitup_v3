@@ -16,3 +16,7 @@
 2024/08/22 15:22:41 db.go:15: Database Connected Successfully!
 2024/08/22 15:23:38 user_controller.go:38: user with this email already exists
 2024/08/22 15:25:48 db.go:15: Database Connected Successfully!
+2024/08/22 15:28:12 db.go:15: Database Connected Successfully!
+2024/08/22 15:28:14 user_controller.go:38: user with this email already exists
+2024/08/22 15:33:20 db.go:15: Database Connected Successfully!
+2024/08/22 15:34:48 db.go:15: Database Connected Successfully!

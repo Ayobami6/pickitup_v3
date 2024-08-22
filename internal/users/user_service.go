@@ -3,11 +3,13 @@ package users
 import (
 	"errors"
 	"fmt"
+	"log"
 
 	"github.com/Ayobami6/pickitup_v3/internal/users/dto"
 	"github.com/Ayobami6/pickitup_v3/pkg/auth"
 	"github.com/Ayobami6/pickitup_v3/pkg/models"
 	"github.com/Ayobami6/pickitup_v3/pkg/types"
+	"github.com/Ayobami6/pickitup_v3/pkg/utils"
 )
 
 type UserService struct {
@@ -42,6 +44,17 @@ func (u *UserService)RegisterUser(pl dto.RegisterUserDTO) (any, error) {
         return "", err
     }
 	// implement send otp for verification
-	message := fmt.Sprintf("Registration Successfully")
+	num, err := utils.GenerateAndCacheVerificationCode(email)
+	if err != nil {
+		log.Println("Generate Code Failed: ", err)
+	} else {
+		// send the mail
+		msg := fmt.Sprintf("Your verification code is %d\n", num)
+		err = utils.SendMail(email, "Email Verification", username, msg)
+        if err!= nil {
+            log.Printf("Email sending failed due to %v\n", err)
+        }
+	}
+	message := "Registration Successfully"
     return message, nil
 }

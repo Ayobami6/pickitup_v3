@@ -39,6 +39,9 @@ func (uc *UserController)RegisterUser(c *gin.Context){
 		if strings.Contains(err.Error(), "email") {
 			c.JSON(http.StatusConflict, utils.Response(http.StatusConflict,  nil, "User with this email already exists"))
             return
+		} else if strings.Contains(err.Error(),"uni_users_phone_number"){
+			c.JSON(http.StatusConflict, utils.Response(http.StatusConflict, nil, "User with this phone already exists"))
+			return
 		}
         c.JSON(500, utils.Response(500,  nil, nil))
         return
