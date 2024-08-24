@@ -10,3 +10,16 @@ type UserRepo interface {
 	GetUserByEmail(email string) (*models.User, error)
 	UpdateUser(user *models.User) error
 }
+
+type RiderRepo interface {
+	CreateRider(rider *models.Rider) error
+	GetRiders() (*[]models.Rider, error)
+	GetRiderByID(id uint) (*models.Rider, error)
+	GetRiderByUserID(userID uint) (*models.Rider, error)
+	GetRiderReviews(riderID uint) (*[]models.Review, error)
+	UpdateRiderRating(riderID uint) error
+	UpdateRiderMinAndMaxCharge(minCharge float64, maxCharge float64, userID uint) error
+	UpdateRiderAvailability(riderID uint, status models.RiderAvailabilityStatus) error
+	Save(rider *models.Rider) error
+}
+

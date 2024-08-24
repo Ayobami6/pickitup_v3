@@ -26,3 +26,4 @@
 2024/08/22 16:32:29 user_controller.go:39: ERROR: duplicate key value violates unique constraint "uni_users_phone_number" (SQLSTATE 23505)
 2024/08/22 16:32:36 user_service.go:56: Email sending failed due to open utils/verification_template.html: The system cannot find the path specified.
 2024/08/22 16:35:47 db.go:15: Database Connected Successfully!
+2024/08/22 16:39:10 db.go:15: Database Connected Successfully!
