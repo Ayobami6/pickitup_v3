@@ -127,6 +127,10 @@ func WriteError(w http.ResponseWriter, status int, err... string) {
     WriteJSON(w, status, "error", nil, errMessage)
 }
 
+func ThrowError(err error) error{
+	log.Println(err)
+	return err
+}
 
 func ParseJSON(r *http.Request, payload any) error {
 	if r.Body == nil {

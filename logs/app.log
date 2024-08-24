@@ -27,3 +27,50 @@
 2024/08/22 16:32:36 user_service.go:56: Email sending failed due to open utils/verification_template.html: The system cannot find the path specified.
 2024/08/22 16:35:47 db.go:15: Database Connected Successfully!
 2024/08/22 16:39:10 db.go:15: Database Connected Successfully!
+2024/08/25 00:16:46 db.go:15: Database Connected Successfully!
+2024/08/25 00:17:43 db.go:15: Database Connected Successfully!
+2024/08/25 00:19:31 db.go:15: Database Connected Successfully!
+2024/08/25 00:19:39 utils.go:131: ERROR: relation "riders" does not exist (SQLSTATE 42P01)
+2024/08/25 00:19:39 rider_service.go:76: Generate Code failed:  dial tcp [::1]:6379: connectex: No connection could be made because the target machine actively refused it.
+2024/08/25 00:21:57 db.go:15: Database Connected Successfully!
+2024/08/25 00:24:22 db.go:15: Database Connected Successfully!
+2024/08/25 00:24:56 rider_controller.go:42: user with this email already exists
+2024/08/25 00:25:34 utils.go:131: ERROR: duplicate key value violates unique constraint "uni_users_phone_number" (SQLSTATE 23505)
+2024/08/25 00:25:34 utils.go:131: ERROR: insert or update on table "riders" violates foreign key constraint "fk_users_rider" (SQLSTATE 23503)
+2024/08/25 00:25:35 rider_service.go:76: Generate Code failed:  dial tcp [::1]:6379: connectex: No connection could be made because the target machine actively refused it.
+2024/08/25 00:30:08 utils.go:131: ERROR: duplicate key value violates unique constraint "uni_users_phone_number" (SQLSTATE 23505)
+2024/08/25 00:30:08 utils.go:131: ERROR: insert or update on table "riders" violates foreign key constraint "fk_users_rider" (SQLSTATE 23503)
+2024/08/25 00:30:08 rider_service.go:76: Generate Code failed:  dial tcp [::1]:6379: connectex: No connection could be made because the target machine actively refused it.
+2024/08/25 00:30:11 utils.go:131: ERROR: duplicate key value violates unique constraint "uni_users_phone_number" (SQLSTATE 23505)
+2024/08/25 00:30:11 utils.go:131: ERROR: insert or update on table "riders" violates foreign key constraint "fk_users_rider" (SQLSTATE 23503)
+2024/08/25 00:30:11 rider_service.go:76: Generate Code failed:  dial tcp [::1]:6379: connectex: No connection could be made because the target machine actively refused it.
+2024/08/25 00:31:10 utils.go:131: ERROR: duplicate key value violates unique constraint "uni_users_phone_number" (SQLSTATE 23505)
+2024/08/25 00:31:10 utils.go:131: ERROR: insert or update on table "riders" violates foreign key constraint "fk_users_rider" (SQLSTATE 23503)
+2024/08/25 00:31:10 rider_service.go:76: Generate Code failed:  dial tcp [::1]:6379: connectex: No connection could be made because the target machine actively refused it.
+2024/08/25 00:31:25 utils.go:131: ERROR: duplicate key value violates unique constraint "uni_users_phone_number" (SQLSTATE 23505)
+2024/08/25 00:31:25 utils.go:131: ERROR: insert or update on table "riders" violates foreign key constraint "fk_users_rider" (SQLSTATE 23503)
+2024/08/25 00:31:26 rider_service.go:76: Generate Code failed:  dial tcp [::1]:6379: connectex: No connection could be made because the target machine actively refused it.
+2024/08/25 00:32:32 db.go:15: Database Connected Successfully!
+2024/08/25 00:32:34 utils.go:131: ERROR: duplicate key value violates unique constraint "uni_users_phone_number" (SQLSTATE 23505)
+2024/08/25 00:32:34 utils.go:131: ERROR: insert or update on table "riders" violates foreign key constraint "fk_users_rider" (SQLSTATE 23503)
+2024/08/25 00:32:34 rider_service.go:76: Generate Code failed:  dial tcp [::1]:6379: connectex: No connection could be made because the target machine actively refused it.
+2024/08/25 00:33:01 utils.go:131: ERROR: duplicate key value violates unique constraint "uni_users_phone_number" (SQLSTATE 23505)
+2024/08/25 00:33:01 utils.go:131: ERROR: insert or update on table "riders" violates foreign key constraint "fk_users_rider" (SQLSTATE 23503)
+2024/08/25 00:33:01 rider_service.go:76: Generate Code failed:  dial tcp [::1]:6379: connectex: No connection could be made because the target machine actively refused it.
+2024/08/25 00:33:20 utils.go:131: ERROR: duplicate key value violates unique constraint "uni_users_phone_number" (SQLSTATE 23505)
+2024/08/25 00:33:20 utils.go:131: ERROR: insert or update on table "riders" violates foreign key constraint "fk_users_rider" (SQLSTATE 23503)
+2024/08/25 00:33:21 rider_service.go:76: Generate Code failed:  dial tcp [::1]:6379: connectex: No connection could be made because the target machine actively refused it.
+2024/08/25 00:35:08 utils.go:131: ERROR: duplicate key value violates unique constraint "uni_users_phone_number" (SQLSTATE 23505)
+2024/08/25 00:35:08 utils.go:131: ERROR: insert or update on table "riders" violates foreign key constraint "fk_users_rider" (SQLSTATE 23503)
+2024/08/25 00:35:08 rider_service.go:76: Generate Code failed:  dial tcp [::1]:6379: connectex: No connection could be made because the target machine actively refused it.
+2024/08/25 00:37:15 db.go:15: Database Connected Successfully!
+2024/08/25 00:37:32 rider_service.go:56: Error creating user ERROR: duplicate key value violates unique constraint "uni_users_phone_number" (SQLSTATE 23505) 
+2024/08/25 00:37:32 utils.go:131: ERROR: duplicate key value violates unique constraint "uni_users_phone_number" (SQLSTATE 23505)
+2024/08/25 00:37:32 utils.go:131: ERROR: insert or update on table "riders" violates foreign key constraint "fk_users_rider" (SQLSTATE 23503)
+2024/08/25 00:37:32 rider_service.go:77: Generate Code failed:  dial tcp [::1]:6379: connectex: No connection could be made because the target machine actively refused it.
+2024/08/25 00:38:09 db.go:15: Database Connected Successfully!
+2024/08/25 00:38:11 rider_service.go:56: Error creating user ERROR: duplicate key value violates unique constraint "uni_users_phone_number" (SQLSTATE 23505) 
+2024/08/25 00:38:11 utils.go:131: ERROR: duplicate key value violates unique constraint "uni_users_phone_number" (SQLSTATE 23505)
+2024/08/25 00:38:11 rider_controller.go:42: ERROR: duplicate key value violates unique constraint "uni_users_phone_number" (SQLSTATE 23505)
+2024/08/25 00:39:07 db.go:15: Database Connected Successfully!
+2024/08/25 00:39:17 rider_service.go:77: Generate Code failed:  dial tcp [::1]:6379: connectex: No connection could be made because the target machine actively refused it.

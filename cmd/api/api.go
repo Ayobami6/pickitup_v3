@@ -1,6 +1,7 @@
 package api
 
 import (
+	"github.com/Ayobami6/pickitup_v3/internal/riders"
 	"github.com/Ayobami6/pickitup_v3/internal/users"
 	"github.com/Ayobami6/pickitup_v3/routes"
 	"github.com/gin-gonic/gin"
@@ -28,6 +29,11 @@ func (s *APIServer) Run() error {
 	userService := users.NewUserService(userRepo)
 	userController := users.NewUserController(*userService)
 	userController.RegisterRoutes(v3)
+
+	riderRepo := riders.NewRiderRepoImpl(s.db)
+	riderService := riders.NewRiderService(riderRepo, userRepo)
+	riderController := riders.NewRiderController(*riderService)
+	riderController.RegisterRoutes(v3)
 
 	return router.Run(s.address)
 }

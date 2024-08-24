@@ -12,11 +12,16 @@ type RideRepoImpl struct {
 }
 
 
-func NewRideRepoImpl(db *gorm.DB) *RideRepoImpl {
+func NewRiderRepoImpl(db *gorm.DB) *RideRepoImpl {
+    // automigrate
+    err := db.AutoMigrate(&models.Rider{})
+    if err!= nil {
+        panic("failed to auto migrate")
+    }
     return &RideRepoImpl{db: db}
 }
 
-func (r *RideRepoImpl) CreateRide(rider *models.Rider) error {
+func (r *RideRepoImpl)CreateRider(rider *models.Rider) error {
     return r.db.Create(rider).Error
 }
 
@@ -29,7 +34,7 @@ func (r *RideRepoImpl)GetRiders()(*[]models.Rider, error) {
     return &riders, nil
 }
 
-func (r *RideRepoImpl) GetRideById(id uint) (*models.Rider, error) {
+func (r *RideRepoImpl) GetRiderByID(id uint) (*models.Rider, error) {
 	// get rider by id
 	var rider models.Rider
     res := r.db.First(&rider, id)
@@ -61,7 +66,7 @@ func (r *RideRepoImpl)GetRiderReviews(riderId uint)(*[]models.Review,error) {
 
 func (r *RideRepoImpl)UpdateRiderRating(riderID uint) error {
 	// get rider by id
-	rider, err := r.GetRideById(riderID)
+	rider, err := r.GetRiderByID(riderID)
 	if err!= nil {
         return err
     }
@@ -83,11 +88,11 @@ func (r *RideRepoImpl)UpdateRiderRating(riderID uint) error {
 
 }
 
-func (r *RideRepoImpl)Save(rider models.Rider) error {
+func (r *RideRepoImpl)Save(rider *models.Rider) error {
 	return r.db.Save(&rider).Error
 }
 
-func (r * RideRepoImpl)UpdateMinAndMaxCharge(minCharge float64, maxCharge float64, userID uint)error {
+func (r * RideRepoImpl)UpdateRiderMinAndMaxCharge(minCharge float64, maxCharge float64, userID uint)error {
 	res := r.db.Where(&models.Rider{UserID: uint(userID)}).Updates(&models.Rider{MinimumCharge: minCharge, MaximumCharge: maxCharge})
     if res.Error!= nil {
         return res.Error
