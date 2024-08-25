@@ -83,7 +83,7 @@ func WriteJSON(w http.ResponseWriter, status int, status_msg, data any, others .
 }
 
 
-func Response(statusCode int, data map[string]any, message any) map[string]any {
+func Response(statusCode int, data any, message any) map[string]any {
 	var status string
 	switch {
 	case statusCode >= 200 && statusCode <= 299:
@@ -115,6 +115,14 @@ func Response(statusCode int, data map[string]any, message any) map[string]any {
 
 }
 
+
+func GetDomainUrl(c *gin.Context) string {
+	scheme := "http"
+    if c.Request.TLS != nil {
+        scheme = "https"
+    }
+    return scheme + "://" + c.Request.Host
+}
 
 func WriteError(w http.ResponseWriter, status int, err... string) {
 	var errMessage string

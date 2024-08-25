@@ -1,8 +1,10 @@
 package riders
 
 import (
+	"fmt"
 	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/Ayobami6/pickitup_v3/internal/riders/dto"
 	"github.com/Ayobami6/pickitup_v3/pkg/utils"
@@ -25,6 +27,8 @@ func NewRiderController(riderService RiderService) *RiderController {
 func (c *RiderController)RegisterRoutes(router *gin.RouterGroup){
 	riders := router.Group("/riders")
 	riders.POST("/register", c.RegisterRider)
+	riders.GET("/:id", c.GetRider)
+	riders.GET("", c.GetRiders)
 }
 
 // RegisterRider handles POST request to register a new rider
@@ -48,4 +52,35 @@ func (c *RiderController) RegisterRider(ctx *gin.Context) {
 
 // GetRider retrieves a rider by id from the service
 
+func (c *RiderController) GetRider(ctx *gin.Context) {
+    id := ctx.Param("id")
+	// convert ascii to integer
+	rid, err := strconv.Atoi(id)
+	if err != nil {
+		ctx.JSON(400, utils.Response(http.StatusBadRequest, nil, err.Error()))
+	}
+    rider, err := c.riderService.GetRider(uint(rid))
+    if err!= nil {
+        ctx.JSON(404, utils.Response(http.StatusNotFound, nil, "Rider not found"))
+        return
+    }
+	domain := utils.GetDomainUrl(ctx)
+	rider.SelfUrl = fmt.Sprintf("%s/riders/%s", domain, rider.RiderID)
+    ctx.JSON(200, utils.Response(http.StatusOK, rider, "Rider Fetch Successfully"))
+}
+
 // GetRiders retrieves all riders from the service
+
+func (c *RiderController) GetRiders(ctx *gin.Context) {
+    riders, err := c.riderService.GetRiders()
+    if err!= nil {
+        ctx.JSON(500, utils.Response(http.StatusInternalServerError, nil, err.Error()))
+        return
+    }
+    domain := utils.GetDomainUrl(ctx)
+	riderList := *riders
+    for i := range riderList {
+        riderList[i].SelfUrl = fmt.Sprintf("%s/riders/%s", domain, riderList[i].RiderID)
+    }
+    ctx.JSON(200, utils.Response(http.StatusOK, riders, "Riders Fetch Successfully"))
+}

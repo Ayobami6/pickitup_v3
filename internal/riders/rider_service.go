@@ -83,3 +83,73 @@ func (rs *RiderService)CreateRider(pl dto.RegisterRiderDTO) error {
     return nil
 
 }
+
+func (rs *RiderService)GetRiders() (*[]dto.RiderListResponse, error) {
+	// get riders
+	riders, err := rs.riderRepo.GetRiders();
+	var riderDtoList []dto.RiderListResponse
+	if err!= nil {
+        log.Printf("Couldn't fetch riders %v \n", err)
+        return nil, utils.ThrowError(err)
+    }
+	riderList := *riders
+	for _, rider := range riderList {
+		riderDto := dto.RiderListResponse{
+            RiderID:             rider.RiderID,
+            FirstName:          rider.FirstName,
+            LastName:           rider.LastName,
+            Address:            rider.Address,
+            BikeNumber:         rider.BikeNumber,
+            Rating: rider.Rating,
+            SuccessfulRides:     rider.SuccessfulRides,
+            Level:              rider.Level,
+            CurrentLocation:    rider.CurrentLocation,
+            AvailabilityStatus:     string(rider.AvailabilityStatus),
+            MaximumCharge:      rider.MaximumCharge,
+            MinimumCharge:      rider.MinimumCharge,
+        }
+        riderDtoList = append(riderDtoList, riderDto)
+    }
+	return &riderDtoList, nil
+
+}
+
+func (rs *RiderService)GetRider(riderID uint) (*dto.RiderResponse, error) {
+	// get rider by id
+    rider, err := rs.riderRepo.GetRiderByID(riderID);
+    if err!= nil {
+        log.Printf("Couldn't fetch rider %v \n", err)
+        return nil, utils.ThrowError(err)
+    }
+	// get reviews 
+	var reviewsDto []dto.ReviewResponse
+	reviews, err := rs.riderRepo.GetRiderReviews(riderID)
+	if err!= nil {
+        log.Printf("Couldn't fetch reviews for rider %v \n", err)
+        return nil, utils.ThrowError(err)
+    }
+	for _, review := range *reviews {
+		reviewsDto = append(reviewsDto, dto.ReviewResponse{
+            Rating: review.Rating,
+            Comment: review.Comment,
+        })
+	}
+	res := dto.RiderResponse{
+		RiderID:             rider.RiderID,
+        FirstName:          rider.FirstName,
+        LastName:           rider.LastName,
+        Address:            rider.Address,
+        BikeNumber:         rider.BikeNumber,
+		Rating: rider.Rating,
+        SuccessfulRides:     rider.SuccessfulRides,
+		Level:              rider.Level,
+        CurrentLocation:    rider.CurrentLocation,
+        AvailabilityStatus:     string(rider.AvailabilityStatus),
+		MaximumCharge:      rider.MaximumCharge,
+        MinimumCharge:      rider.MinimumCharge,
+		Reviews: reviewsDto,
+	}
+    return &res, nil
+
+}
+
