@@ -75,3 +75,4 @@
 2024/08/25 00:39:07 db.go:15: Database Connected Successfully!
 2024/08/25 00:39:17 rider_service.go:77: Generate Code failed:  dial tcp [::1]:6379: connectex: No connection could be made because the target machine actively refused it.
 2024/08/25 21:42:25 db.go:15: Database Connected Successfully!
+2024/08/25 21:43:06 db.go:15: Database Connected Successfully!
