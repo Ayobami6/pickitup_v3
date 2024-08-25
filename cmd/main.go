@@ -7,6 +7,7 @@ import (
 	"os"
 
 	"github.com/Ayobami6/pickitup_v3/cmd/api"
+	_ "github.com/Ayobami6/pickitup_v3/cmd/docs"
 	"github.com/Ayobami6/pickitup_v3/config"
 	"github.com/Ayobami6/pickitup_v3/db"
 	_ "github.com/joho/godotenv/autoload"
@@ -22,6 +23,21 @@ func init() {
 	log.SetFlags(log.LstdFlags | log.Lshortfile)
 }
 
+
+// @title Swagger Example API
+// @version 1.0
+// @description This is a sample server Petstore server.
+// @termsOfService http://swagger.io/terms/
+
+// @contact.name API Support
+// @contact.url http://www.swagger.io/support
+// @contact.email support@swagger.io
+
+// @license.name Apache 2.0
+// @license.url http://www.apache.org/licenses/LICENSE-2.0.html
+
+// @host localhost:8080
+// @BasePath /api/v1
 func main() {
 	host := config.GetEnv("DB_HOST", "localhost")
 	port := config.GetEnv("DB_PORT", "5432")

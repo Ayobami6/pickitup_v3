@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"strconv"
 
+	_ "github.com/Ayobami6/pickitup_v3/cmd/docs"
 	"github.com/Ayobami6/pickitup_v3/internal/riders/dto"
 	"github.com/Ayobami6/pickitup_v3/pkg/utils"
 	"github.com/gin-gonic/gin"
@@ -33,6 +34,16 @@ func (c *RiderController)RegisterRoutes(router *gin.RouterGroup){
 
 // RegisterRider handles POST request to register a new rider
 
+// @Summary      Register a new rider
+// @Description  Register a new rider with the provided details
+// @Tags         riders
+// @Accept       json
+// @Produce      json
+// @Param        rider  body      dto.RegisterRiderDTO  true  "Rider registration details"
+// @Success      201    {object}  utils.ResponseMessage
+// @Failure      400    {object}  utils.ResponseMessage
+// @Failure      500    {object}  utils.ResponseMessage
+// @Router       /riders/register [post]
 func (c *RiderController) RegisterRider(ctx *gin.Context) {
     // implement the logic to register a new rider
 	var pl dto.RegisterRiderDTO

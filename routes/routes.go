@@ -4,7 +4,10 @@ import (
 	"fmt"
 	"net/http"
 
+	_ "github.com/Ayobami6/pickitup_v3/cmd/docs"
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 func RootRoute(router *gin.Engine) {
@@ -28,6 +31,7 @@ func RootRoute(router *gin.Engine) {
 	router.NoRoute(func(c *gin.Context) {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Page not found"})
 	})
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 }
 
 // func UserRoutes(router *gin.Engine, userController users.UserController){
