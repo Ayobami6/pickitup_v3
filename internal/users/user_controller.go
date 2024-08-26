@@ -36,7 +36,7 @@ func (uc *UserController)RegisterUser(c *gin.Context){
 	// register user 
 	msg, err := uc.service.RegisterUser(payload)
     if err!= nil {
-		log.Println(err)
+		log.Println("Error from register service: ", err)
 		if strings.Contains(err.Error(), "email") {
 			c.JSON(http.StatusConflict, utils.Response(http.StatusConflict,  nil, "User with this email already exists"))
             return

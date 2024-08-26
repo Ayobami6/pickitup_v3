@@ -32,8 +32,6 @@ func (c *RiderController)RegisterRoutes(router *gin.RouterGroup){
 	riders.GET("", c.GetRiders)
 }
 
-// RegisterRider handles POST request to register a new rider
-
 // @Summary      Register a new rider
 // @Description  Register a new rider with the provided details
 // @Tags         riders
