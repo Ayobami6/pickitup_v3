@@ -85,3 +85,18 @@
 2024/08/25 22:38:38 db.go:15: Database Connected Successfully!
 2024/08/26 09:46:51 db.go:15: Database Connected Successfully!
 2024/08/26 10:20:33 db.go:15: Database Connected Successfully!
+2024/08/28 03:18:58 db.go:15: Database Connected Successfully!
+2024/08/28 03:21:37 db.go:15: Database Connected Successfully!
+2024/08/28 03:29:00 db.go:15: Database Connected Successfully!
+2024/08/28 03:34:25 rider_service.go:77: Generate Code failed:  dial tcp [::1]:6379: connectex: No connection could be made because the target machine actively refused it.
+2024/08/28 03:39:04 db.go:15: Database Connected Successfully!
+2024/08/28 03:39:28 db.go:15: Database Connected Successfully!
+2024/08/28 03:40:31 db.go:15: Database Connected Successfully!
+2024/08/28 03:40:50 rider_service.go:129: Couldn't fetch reviews for rider ERROR: relation "reviews" does not exist (SQLSTATE 42P01) 
+2024/08/28 03:40:50 utils.go:139: ERROR: relation "reviews" does not exist (SQLSTATE 42P01)
+2024/08/28 03:44:26 db.go:15: Database Connected Successfully!
+2024/08/28 03:44:30 rider_service.go:129: Couldn't fetch reviews for rider ERROR: relation "reviews" does not exist (SQLSTATE 42P01) 
+2024/08/28 03:46:23 db.go:15: Database Connected Successfully!
+2024/08/28 03:46:26 rider_service.go:129: Couldn't fetch reviews for rider ERROR: relation "reviews" does not exist (SQLSTATE 42P01) 
+2024/08/28 03:47:06 db.go:15: Database Connected Successfully!
+2024/08/28 03:47:08 rider_service.go:129: Couldn't fetch reviews for rider ERROR: relation "reviews" does not exist (SQLSTATE 42P01) 

@@ -65,8 +65,6 @@ func (uc *UserController)Login(c *gin.Context) {
         c.JSON(401, utils.Response(401,  nil, "Invalid credentials"))
         return
     }
-	data := map[string]any{
-		"token": token,
-	}
-    c.JSON(200, utils.Response(http.StatusOK, data, "Login Successful"))
+	
+    c.JSON(200, utils.Response(http.StatusOK, token, "Login Successful"))
 }

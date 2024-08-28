@@ -8,6 +8,7 @@ import (
 
 	_ "github.com/Ayobami6/pickitup_v3/cmd/docs"
 	"github.com/Ayobami6/pickitup_v3/internal/riders/dto"
+	"github.com/Ayobami6/pickitup_v3/pkg/auth"
 	"github.com/Ayobami6/pickitup_v3/pkg/utils"
 	"github.com/gin-gonic/gin"
 )
@@ -30,6 +31,8 @@ func (c *RiderController)RegisterRoutes(router *gin.RouterGroup){
 	riders.POST("/register", c.RegisterRider)
 	riders.GET("/:id", c.GetRider)
 	riders.GET("", c.GetRiders)
+	riders.PATCH("/charges", auth.RiderAuth(c.riderService.riderRepo), c.UpdateCharge)
+	riders.PATCH("/status", auth.RiderAuth(c.riderService.riderRepo), c.UpdateStatus)
 }
 
 // @Summary      Register a new rider
@@ -49,7 +52,7 @@ func (c *RiderController) RegisterRider(ctx *gin.Context) {
         ctx.JSON(400, gin.H{"error": err.Error()})
         return
     }
-	err := c.riderService.CreateRider(pl)
+	err := c.riderService.CreateRider(&pl)
 	if err!= nil {
 		// TODO: need to handler potential errors
 		log.Println(err)
@@ -89,7 +92,74 @@ func (c *RiderController) GetRiders(ctx *gin.Context) {
     domain := utils.GetDomainUrl(ctx)
 	riderList := *riders
     for i := range riderList {
-        riderList[i].SelfUrl = fmt.Sprintf("%s/riders/%s", domain, riderList[i].RiderID)
+        riderList[i].SelfUrl = fmt.Sprintf("%s/riders/%d", domain, riderList[i].ID)
     }
     ctx.JSON(200, utils.Response(http.StatusOK, riders, "Riders Fetch Successfully"))
+}
+
+
+func(c *RiderController)UpdateCharge(ctx *gin.Context) {
+	// get user id from context
+	userId := auth.GetUserIDFromContext(ctx)
+	if userId == -1 {
+        auth.Forbidden(ctx)
+        return
+    }
+	// payload
+	var pl dto.UpdateChargeDTO
+	if err := ctx.ShouldBindJSON(&pl); err!= nil {
+        ctx.JSON(400, utils.Response(400, nil, err.Error()))
+        return
+    }
+	// send payload to the service
+	var userID uint = uint(userId)
+	err := c.riderService.UpdateCharges(&pl, userID)
+	if err!= nil {
+        log.Println(err)
+        ctx.JSON(500, utils.Response(500, nil, err.Error()))
+        return
+    }
+
+	ctx.JSON(200, utils.Response(http.StatusOK, nil, "Charges Updated Successfully"))
+
+}
+
+func (c *RiderController)UpdateStatus(ctx *gin.Context) {
+	// get user id from context
+    userId := auth.GetUserIDFromContext(ctx)
+    if userId == -1 {
+        auth.Forbidden(ctx)
+        return
+    }
+    // payload
+    var pl *dto.UpdateRiderAvailabilityStatusDTO
+	// bind json payload
+	if err := ctx.ShouldBindJSON(&pl); err != nil {
+		ctx.JSON(http.StatusBadRequest, utils.Response(http.StatusBadRequest, nil, err.Error()))
+		return
+	}
+
+	// validate status type
+	var userID uint = uint(userId)
+
+	statusMap := map[string]bool{
+		"Available": true,
+        "Unavailable": true,
+        "On Break": true,
+        "Busy": true,
+	}
+	if !statusMap[pl.AvailabilityStatus]{
+		ctx.JSON(http.StatusBadRequest, utils.Response(http.StatusBadRequest, nil, "Invalid availability status"))
+        return
+	}
+	// send payload to the service
+	err := c.riderService.UpdateRiderAvailability(pl, userID)
+    if err!= nil {
+        log.Println(err)
+        ctx.JSON(http.StatusInternalServerError, utils.Response(http.StatusInternalServerError, nil, err.Error()))
+        return
+    }
+
+    ctx.JSON(http.StatusOK, utils.Response(http.StatusOK, nil, "Status Updated Successfully"))
+
 }

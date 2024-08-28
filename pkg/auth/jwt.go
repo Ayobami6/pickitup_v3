@@ -21,81 +21,90 @@ var UserKey contextKey= "UserID"
 const RiderKey contextKey = "RiderID"
 
 
-func CreateJWT(secret []byte, userId int) (string, error) {
+func CreateJWT(secret []byte, userId int) (map[string]string, error) {
 	exp, err := strconv.ParseInt(config.GetEnv("JWT_EXPIRATION", "25000"), 10, 64)
+	
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 	expiration := time.Second * time.Duration(exp)
+	expiredAt := time.Now().Add(expiration).Unix()
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"UserID": strconv.Itoa(userId),
-		"expiredAt": time.Now().Add(expiration).Unix(),
+		"expiredAt": expiredAt,
 	})
 	tokenStr, err := token.SignedString(secret)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
-	return tokenStr, nil
+	data := map[string]string{
+		"token": tokenStr,
+		"expiredAt": strconv.FormatInt(expiredAt, 10),
+	}
+	return data, nil
 
 }
 
 
-// func RiderAuth(handlerFunc http.HandlerFunc, riderStore models.RiderRepository) gin.HandlerFunc{
-// 	return func(c *gin.Context) {
-// 		// get token frome request
-// 		tokenString, err := utils.GetTokenFromRequest(r)
-// 		if err != nil {
-// 			log.Println("TokenString error: ", err)
-// 			utils.WriteError(w, http.StatusInternalServerError, "Don't Panic This is From Us!")
-// 			return
-// 		}
-// 		token, err := jwt.ParseWithClaims(tokenString, &jwt.MapClaims{}, func(token *jwt.Token) (interface{}, error) {
-//             if _, ok := token.Method.(*jwt.SigningMethodHMAC);!ok {
-//                 return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
-//             }
-//             return []byte(config.GetEnv("JWT_SECRET", "")), nil
-//         })
-// 		if err!= nil ||!token.Valid {
-// 			log.Println("TokenValid error: ", err)
-//             Forbidden(w)
-//             return
-//         }
-// 		claims, ok := token.Claims.(*jwt.MapClaims)
-// 		if !ok {
-// 			log.Println("Claims error: ", err)
-// 			Forbidden(w)
-// 			return
-// 		}
-// 		userIDStr, ok := (*claims)["UserID"].(string)
-// 		if!ok {
-// 			log.Println("UserId error: ", err)
-//             Forbidden(w)
-//             return
-//         }
-// 		userID, err := strconv.Atoi(userIDStr)
-// 		if err!= nil {
-// 			log.Println("Atoi Convert error: ", err)
-//             utils.WriteError(w, http.StatusInternalServerError, "Don't Panic This is From Us!")
-//             return
-//         }
-// 		var ID uint = uint(userID)
-// 		// get rider by the user ID
-// 		rider, err := riderStore.GetRiderByUserID(ID)
-// 		if err != nil {
-// 			Forbidden(w)
-// 			return
-// 		}
-// 		if rider.UserID == 0 {
-// 			Forbidden(w)
-// 			return
-// 		}
-// 		// save Rider Id to the request context
-// 		ctx := context.WithValue(r.Context(), UserKey, userID)
-//         ctx = context.WithValue(ctx, RiderKey, rider.ID)
-//         r = r.WithContext(ctx)
-//         handlerFunc(w, r)
-// 	}
-// }
+func RiderAuth(riderRepo types.RiderRepo) gin.HandlerFunc{
+	return func(c *gin.Context) {
+		// get token frome request
+		tokenString, err := utils.GetTokenFromRequest(c)
+		if err != nil {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "Missing or invalid token"})
+			c.Abort()
+			return
+		}
+		token, err := jwt.ParseWithClaims(tokenString, &jwt.MapClaims{}, func(token *jwt.Token) (interface{}, error) {
+            if _, ok := token.Method.(*jwt.SigningMethodHMAC);!ok {
+                return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
+            }
+            return []byte(config.GetEnv("JWT_SECRET", "")), nil
+        })
+		if err!= nil ||!token.Valid {
+			log.Println("TokenValid error: ", err)
+            Forbidden(c)
+            return
+        }
+		claims, ok := token.Claims.(*jwt.MapClaims)
+		if !ok {
+			log.Println("Claims error: ", err)
+			Forbidden(c)
+			return
+		}
+		userIDStr, ok := (*claims)["UserID"].(string)
+		if!ok {
+			log.Println("UserId error: ", err)
+            Forbidden(c)
+            return
+        }
+		userID, err := strconv.Atoi(userIDStr)
+		if err!= nil {
+			log.Println("Atoi Convert error: ", err)
+            c.JSON(http.StatusInternalServerError, utils.Response(http.StatusInternalServerError, nil, err.Error()))
+			c.Abort()
+            return
+        }
+		var ID uint = uint(userID)
+		// get rider by the user ID
+		rider, err := riderRepo.GetRiderByUserID(ID)
+		if err != nil {
+			Forbidden(c)
+			return
+		}
+		if rider.UserID == 0 {
+			Forbidden(c)
+			return
+		}
+
+		// Set the user ID in the context
+		c.Set("UserID", userID)
+		c.Set("RiderID", rider.ID)
+
+		// Proceed to the next handler
+		c.Next()
+	}
+}
 
 
 // func UserAuth(handlerFunc http.HandlerFunc, riderStore models.RiderRepository) http.HandlerFunc {
@@ -214,12 +223,13 @@ func Auth(userStore types.UserRepo) gin.HandlerFunc {
 	}
 }
 
-func Forbidden(w http.ResponseWriter) {
-	utils.WriteError(w, http.StatusForbidden, "Unauthorized",)
+func Forbidden(c *gin.Context) {
+	c.JSON(http.StatusForbidden, utils.Response(http.StatusForbidden, nil, "Unauthorized"))
+	c.Abort()
 }
 
 
-func GetUserIDFromContext(ctx gin.Context) int {
+func GetUserIDFromContext(ctx *gin.Context) int {
 	userID, ok := ctx.Get("UserID")
     if !ok {
         return -1
@@ -227,7 +237,7 @@ func GetUserIDFromContext(ctx gin.Context) int {
     return userID.(int)
 }
 
-func GetRiderIDFromContext(ctx gin.Context) int {
+func GetRiderIDFromContext(ctx *gin.Context) int {
 	riderID, ok := ctx.Get("RiderID")
     if!ok {
         return -1

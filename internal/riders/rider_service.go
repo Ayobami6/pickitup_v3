@@ -21,7 +21,7 @@ func NewRiderService(repo types.RiderRepo, userRepo types.UserRepo) *RiderServic
     return &RiderService{riderRepo: repo, userRepo: userRepo}
 }
 
-func (rs *RiderService)CreateRider(pl dto.RegisterRiderDTO) error {
+func (rs *RiderService)CreateRider(pl *dto.RegisterRiderDTO) error {
 	// extract all data from payload
 	email := pl.Email
 	password := pl.Password
@@ -107,6 +107,7 @@ func (rs *RiderService)GetRiders() (*[]dto.RiderListResponse, error) {
             AvailabilityStatus:     string(rider.AvailabilityStatus),
             MaximumCharge:      rider.MaximumCharge,
             MinimumCharge:      rider.MinimumCharge,
+			ID: rider.ID,
         }
         riderDtoList = append(riderDtoList, riderDto)
     }
@@ -126,15 +127,18 @@ func (rs *RiderService)GetRider(riderID uint) (*dto.RiderResponse, error) {
 	reviews, err := rs.riderRepo.GetRiderReviews(riderID)
 	if err!= nil {
         log.Printf("Couldn't fetch reviews for rider %v \n", err)
-        return nil, utils.ThrowError(err)
-    }
-	for _, review := range *reviews {
-		reviewsDto = append(reviewsDto, dto.ReviewResponse{
-            Rating: review.Rating,
-            Comment: review.Comment,
-        })
+        
+    } else {
+
+		for _, review := range *reviews {
+			reviewsDto = append(reviewsDto, dto.ReviewResponse{
+				Rating: review.Rating,
+				Comment: review.Comment,
+			})
+		}
 	}
 	res := dto.RiderResponse{
+		ID: rider.ID,
 		RiderID:             rider.RiderID,
         FirstName:          rider.FirstName,
         LastName:           rider.LastName,
@@ -153,3 +157,25 @@ func (rs *RiderService)GetRider(riderID uint) (*dto.RiderResponse, error) {
 
 }
 
+func (rs *RiderService)UpdateCharges(pl *dto.UpdateChargeDTO, userId uint) error {
+	minCharge := pl.MinimumCharge
+    maxCharge := pl.MaximumCharge
+    userID := userId
+    // update charges in the database
+    err := rs.riderRepo.UpdateRiderMinAndMaxCharge(minCharge, maxCharge, userID)
+    if err!= nil {
+        return utils.ThrowError(err)
+    }
+    return nil
+}
+
+func (rs *RiderService)UpdateRiderAvailability(pl *dto.UpdateRiderAvailabilityStatusDTO, userId uint) error {
+	availabilityStatus := pl.AvailabilityStatus
+    userID := userId
+    // update availability status in the database
+    err := rs.riderRepo.UpdateRiderAvailability(userID, models.RiderAvailabilityStatus(availabilityStatus))
+    if err!= nil {
+        return utils.ThrowError(err)
+    }
+    return nil
+}

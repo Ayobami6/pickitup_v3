@@ -58,24 +58,24 @@ func (u *UserService)RegisterUser(pl dto.RegisterUserDTO) (any, error) {
 }
 
 
-func (u *UserService) LoginUser(pl dto.LoginDTO) (string, error) {
+func (u *UserService) LoginUser(pl dto.LoginDTO) (map[string]string, error) {
 	email := pl.Email
     password := pl.Password
     // check if user exists
     user, err := u.repo.GetUserByEmail(email)
     if err!= nil {
-        return "", errors.New("user not found")
+        return nil, errors.New("user not found")
     }
     // compare hashed passwords
     if !auth.CheckPassword(user.Password, []byte(password)) {
-        return "", errors.New("invalid password")
+        return nil, errors.New("invalid password")
     }
     // generate and return JWT token
 	secret := []byte(config.GetEnv("JWT_SECRET", "secret"))
     token, err := auth.CreateJWT(secret, int(user.ID))
     if err!= nil {
 		log.Println("Failed to create jwt token: ", err)
-        return "", err
+        return nil, err
     }
     return token, nil
 }
