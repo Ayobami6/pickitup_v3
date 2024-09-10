@@ -100,3 +100,4 @@
 2024/08/28 03:46:26 rider_service.go:129: Couldn't fetch reviews for rider ERROR: relation "reviews" does not exist (SQLSTATE 42P01) 
 2024/08/28 03:47:06 db.go:15: Database Connected Successfully!
 2024/08/28 03:47:08 rider_service.go:129: Couldn't fetch reviews for rider ERROR: relation "reviews" does not exist (SQLSTATE 42P01) 
+2024/09/10 10:04:52 db.go:15: Database Connected Successfully!

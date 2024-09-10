@@ -33,8 +33,3 @@ func RootRoute(router *gin.Engine) {
 	})
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 }
-
-// func UserRoutes(router *gin.Engine, userController users.UserController){
-// 	users := router.Group("/users")
-// 	users.POST("/", userController.RegisterUser)
-// }
